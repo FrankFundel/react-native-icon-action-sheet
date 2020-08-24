@@ -5,7 +5,7 @@
         <item name="bottomSheetStyle">@style/RNIconActionSheet.BottomSheetStyle</item>
     </style>
     <style name="RNIconActionSheet.BottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
-        <item name="android:background">@android:color/white</item>
+    <item name="android:background">#242424</item>
     </style>
     <style name="RNIconActionSheet.HeaderText" parent="TextAppearance.MaterialComponents.Subtitle2" />
     <style name="RNIconActionSheet.Text" parent="TextAppearance.MaterialComponents.Body1" />

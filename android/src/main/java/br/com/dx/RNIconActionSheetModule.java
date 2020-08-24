@@ -12,7 +12,7 @@ import android.graphics.drawable.Drawable;
 import android.os.StrictMode;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.support.design.widget.BottomSheetDialog;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -44,7 +44,7 @@ public class RNIconActionSheetModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void showActionSheetWithOptions(final ReadableMap props, final Callback callback) {
 
-        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getCurrentActivity(), R.style.RNIconActionSheet_DialogStyle);
+        final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getCurrentActivity(), R.style.RNIconActionSheet_DialogStyle);
 
         LinearLayout sheetView = (LinearLayout) getCurrentActivity().getLayoutInflater().inflate(R.layout.rn_iconactionsheet_list, null);
         bottomSheetDialog.setContentView(sheetView);
@@ -57,9 +57,10 @@ public class RNIconActionSheetModule extends ReactContextBaseJavaModule {
         }
 
         ReadableArray options = props.getArray("options");
+        final Integer cancelButtonIndex = props.getInt("cancelButtonIndex");
 
         for (int index = 0; index < options.size(); index++) {
-
+            final Integer currentIndex = index;
             ReadableMap option = options.getMap(index);
             LinearLayout itemView = (LinearLayout) getCurrentActivity().getLayoutInflater().inflate(R.layout.rn_iconactionsheet_list_item, null);
 
@@ -67,6 +68,17 @@ public class RNIconActionSheetModule extends ReactContextBaseJavaModule {
                 String title = option.getString("title");
                 TextView titleTextView = itemView.findViewById(R.id.textView);
                 titleTextView.setText(title);
+                if(option.hasKey("titleTextColor") && !option.isNull("titleTextColor")) {
+                  Double color = option.getDouble("titleTextColor");
+                  titleTextView.setTextColor(color.intValue());
+                }
+                
+                titleTextView.setOnClickListener(new View.OnClickListener(){
+                  public void onClick(View v) {
+                    callback.invoke(currentIndex);
+                    bottomSheetDialog.dismiss();
+                   }
+                });
             }
 
             if (option.hasKey("type") && !option.isNull("type")) {
